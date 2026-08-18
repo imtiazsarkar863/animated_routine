@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Video + Image Overlay</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .vdo {
+            position: relative;
+            /* display: flex; */
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .vdo video {
+            width: 100vw;
+            height: 100vh;
+            object-fit: fill;
+            filter: contrast(1.4);
+        }
+
+        .vdo img {
+            position: absolute;
+            top: 0;
+            left: 0;
+
+            width: 100vw;
+            height: 100vh;
+
+            z-index: 2;
+            opacity: 0.5199956;
+
+            object-fit: fill;
+            background: transparent;
+            filter: contrast(150);
+            filter: brightness(0);
+            filter: invert(100);
+            }
+        
+    </style>
+</head>
+
+<body>
+
+    <div class="vdo">
+
+        <video id="myVideo"
+               src="vdo.mp4" autoplay loop playsinline preload="auto">
+        </video>
+
+        <img class="background" src="img.jpeg" alt="Overlay image" >
+
+    </div>
+    <script>
+    const video = document.getElementById("myVideo");
+
+    // Tell the browser to prioritize the video
+    video.preload = "auto";
+
+    // Start loading immediately
+    video.load();
+
+    // Attempt autoplay
+    video.play().catch(() => {
+        console.log("Autoplay restricted by browser.");
+    });
+</script>
+
+</body>
+
+</html>
