@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video + Image Overlay</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #000;
+        }
+
+        .vdo {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background: #000;
+        }
+
+        /* Native, self-hosted video instead of a Streamable iframe.
+           This loads much faster and more reliably because the browser
+           can start playing as soon as enough of the file is buffered,
+           instead of waiting on a third-party embed/player to boot up. */
+        .vdo video {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+            display: block;
+            background: #000;
+            filter: contrast(1.4);
+        }
+
+        .vdo img {
+            position: absolute;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 2;
+            opacity: 0.5199956;
+            object-fit: cover;
+            background: transparent;
+            pointer-events: none;
+            /* background: transparent; */
+            filter: contrast(150);
+            filter: brightness(0);
+            filter: invert(100);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="vdo">
+        <video
+            id="bgVideo"
+            src="vdo.mp4"
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="auto">
+        </video>
+
+        <img class="background" id="bgImage" src="img.jpeg" alt="Overlay image">
+    </div>
+    <div id="imgError" style="display:none; position:fixed; top:10px; left:10px; z-index:99; background:red; color:white; font-family:Arial; font-size:14px; padding:8px 12px;"></div>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video + Image Overlay</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #000;
+        }
+
+        .vdo {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background: #000;
+        }
+        .vdo video {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+            display: block;
+            background: #000;
+        }
+
+        .vdo img {
+            position: absolute;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 2;
+            opacity: 0.5199956;
+            object-fit: cover;
+            background: transparent;
+            pointer-events: none;
+            /* background: transparent; */
+            filter: contrast(150);
+            filter: brightness(0);
+            filter: invert(100);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="vdo">
+        <video
+            id="bgVideo"
+            src="vdo.mp4"
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="auto">
+        </video>
+
+        <img class="background" id="bgImage" src="img.jpeg" alt="Overlay image">
+    </div>
+    <div id="imgError" style="display:none; position:fixed; top:10px; left:10px; z-index:99; background:red; color:white; font-family:Arial; font-size:14px; padding:8px 12px;"></div>
+
+    <script>
+        const video = document.getElementById("bgVideo");
+        video.addEventListener("canplay", () => {
+            video.play().catch(() => {
+                video.muted = true;
+                video.play().catch(() => {});
+            });
+        });
+
+        video.addEventListener("error", () => {
+            console.error("Video error:", video.error);
+        });
+
+        const bgImage = document.getElementById("bgImage");
+        const imgError = document.getElementById("imgError");
+        bgImage.addEventListener("error", () => {
+            imgError.style.display = "block";
+            imgError.textContent = "Image failed to load: " + bgImage.src;
+            console.error("Image failed to load:", bgImage.src);
+        });
+        bgImage.addEventListener("load", () => {
+            console.log("Image loaded OK:", bgImage.src, bgImage.naturalWidth + "x" + bgImage.naturalHeight);
+        });
+    </script>
+</body>
+</html>
